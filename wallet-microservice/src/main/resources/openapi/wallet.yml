@@ -1,0 +1,97 @@
+openapi: "3.0.1"
+
+info:
+  title: "Wallet"
+  version: "1"
+  description: Account API
+
+servers:
+  - url: http://localhost:8088/api
+    description: Local server
+
+paths:
+
+  /manager/wallet/user:
+    post:
+      summary: Save Wallet user
+      operationId: saveWalletUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Invalid input
+
+  /manager/wallet/transaction/{cellPhoneNumber}:
+    put:
+      summary: Transaction an existing user
+      description: Transaction an existing user by Id
+      operationId: walletTransaction
+      parameters:
+        - name: cellPhoneNumber
+          in: path
+          description: cellPohoneNumber of user to transaction
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Transaction an existent cellPhoneNumber in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletDTO'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Invalid input
+
+components:
+  schemas:
+    Response:
+      type: object
+      additionalProperties:
+        type: object
+    UserDTO:
+      type: object
+      description: Data element for user
+      properties:
+        id:
+          type: string
+        identificationDocumentNumber:
+          type: string
+        cellPhoneNumber:
+          type: string
+        cellPhoneImei:
+          type: string
+        email:
+          type: string
+
+
+    WalletDTO:
+      type: object
+      description: Data element for wallet
+      properties:
+        id:
+          type: string
+        availableBalance:
+          type: number
+          format: double
+        idPersona:
+          type: string
+        cellPhoneNumber:
+          type: string
+
