@@ -30,8 +30,27 @@ paths:
                 $ref: '#/components/schemas/Response'
         "405":
           description: Invalid input
+  /manager/wallet/saveWallet:
+    post:
+      summary: Save Wallet and movement
+      operationId: saveWallet
+      requestBody:
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/WalletDTO'
 
-  /manager/wallet/transaction/{cellPhoneNumber}:
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Invalid input
+
+  /manager/wallet/transaction/{cellPhoneNumber}/{identificationDocumentNumber}:
     put:
       summary: Transaction an existing user
       description: Transaction an existing user by Id
@@ -39,7 +58,13 @@ paths:
       parameters:
         - name: cellPhoneNumber
           in: path
-          description: cellPohoneNumber of user to transaction
+          description: cellPhoneNumber of user to transaction
+          required: true
+          schema:
+            type: string
+        - name: identificationDocumentNumber
+          in: path
+          description: identificationDocumentNumber of user to transaction
           required: true
           schema:
             type: string
@@ -87,11 +112,27 @@ components:
       properties:
         id:
           type: string
+        codeWallet:
+          type: string
         availableBalance:
           type: number
           format: double
-        idPersona:
+        idUser:
           type: string
-        cellPhoneNumber:
+        idClient:
+          type: string
+        lstWalletMovement:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletMovementsDTO'
+
+    WalletMovementsDTO:
+      type: object
+      description: Data element for account Wallet Movements
+      properties:
+        amount:
+          type: number
+          format: double
+        typeMovement:
           type: string
 
