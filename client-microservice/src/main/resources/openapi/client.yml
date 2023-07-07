@@ -78,6 +78,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClientDTO'
+  /manage/clientByDocumentNumber/{dni}:
+    get:
+      summary: Get Client By dni
+      operationId: getClientByDocumentNumber
+      parameters:
+        - name: dni
+          in: path
+          description: dni of an Client to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientDTO'
   /manage/clientAll:
     get:
       summary: Get Clients

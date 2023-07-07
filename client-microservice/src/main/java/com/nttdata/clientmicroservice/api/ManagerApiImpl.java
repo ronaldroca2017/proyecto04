@@ -73,4 +73,12 @@ public class ManagerApiImpl implements ManageApi {
                 .map(ResponseEntity.ok()::body)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+
+    @Override
+    public Mono<ResponseEntity<ClientDTO>> getClientByDocumentNumber(String dni, ServerWebExchange exchange) {
+        return clienteService.getClientByDocumentNumber(dni)
+                .map(clientMapper::toDto)
+                .map(ResponseEntity.ok()::body)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
 }

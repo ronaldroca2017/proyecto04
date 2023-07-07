@@ -14,5 +14,6 @@ public interface ClientService {
 
     Mono<Client> findById(String idClient);
 
+    Mono<Client> getClientByDocumentNumber(String dni);
 
 }

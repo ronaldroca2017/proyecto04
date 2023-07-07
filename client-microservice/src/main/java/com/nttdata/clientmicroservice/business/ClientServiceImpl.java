@@ -36,4 +36,9 @@ public class ClientServiceImpl implements ClientService {
     public Mono<Client> findById(String idClient) {
         return clientRepository.findById(idClient);
     }
+
+    @Override
+    public Mono<Client> getClientByDocumentNumber(String dni) {
+        return clientRepository.getClientByDocumentNumber(dni);
+    }
 }

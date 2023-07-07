@@ -17,7 +17,7 @@ public class ConsumeExternalApi {
 
     public static Mono<ClientResponse> searchClientById(String dni){
         Mono<ClientResponse> monoClientResponse = webClient.get()
-                .uri("/manage/client/{id}", dni)
+                .uri("/manage/clientByDocumentNumber/{id}", dni)
                 .retrieve()
                 .onStatus(HttpStatus.NOT_FOUND::equals, response -> Mono.empty())
                 .bodyToMono(ClientResponse.class);

@@ -10,5 +10,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface ClientRepository extends ReactiveMongoRepository<Client, String> {
 
-
+    @Query("{'dni' : ?0}")
+    Mono<Client> getClientByDocumentNumber(String dni);
 }
