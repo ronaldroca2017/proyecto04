@@ -19,7 +19,7 @@ public class WalletServiceImpl implements WalletService{
     @Autowired
     UserRepository userRepository;
 
-/*
+
     @Override
     public Mono<Wallet> registerWallet(Mono<Wallet> wallet) {
 
@@ -28,7 +28,7 @@ public class WalletServiceImpl implements WalletService{
            return walletRepository.save(w);
         });
 
-    }*/
+    }
 /*
     @Override
     public Mono<Wallet> registerWallet(Mono<Wallet> wallet) {
@@ -52,7 +52,7 @@ public class WalletServiceImpl implements WalletService{
         });
 
     }*/
-
+/*
     @Override
     public Mono<Wallet> registerWallet(Mono<Wallet> wallet) {
 
@@ -65,10 +65,6 @@ public class WalletServiceImpl implements WalletService{
                             w.setAvailableBalance(walletBD.getAvailableBalance() - w.getLstWalletMovement().get(0).getAmount());
                         }
                         w.getLstWalletMovement().addAll(walletBD.getLstWalletMovement());
-                       /* walletBD.getLstWalletMovement()
-                                .stream().map(m -> {
-                                    return w.getLstWalletMovement().add(m);
-                                });*/
 
                         return Mono.just(w);
                     }).flatMap(walletFinal -> {
@@ -82,7 +78,7 @@ public class WalletServiceImpl implements WalletService{
 
         });
 
-    }
+    }*/
 
     @Override
     public Mono<Wallet> getWallet(String codeWallet) {
@@ -146,14 +142,14 @@ public class WalletServiceImpl implements WalletService{
                                 });
 
                     })
-                    .flatMap(clientExist -> {
+                   /* .flatMap(clientExist -> {
                         return ConsumeExternalApi.searchClientById(identificationDocumentNumber)
                                 .flatMap(client -> {
                                     walletRequest.setIdClient(client.getIdClient());
                                     return Mono.just(walletRequest);
                                 });
 
-                    })
+                    })*/
                     .flatMap(t -> walletRepository.save(walletRequest));
 
 
