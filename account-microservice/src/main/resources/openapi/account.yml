@@ -1,0 +1,215 @@
+openapi: "3.0.1"
+
+info:
+  title: "Account"
+  version: "1"
+  description: Account API
+
+servers:
+  - url: http://localhost:8081/api
+    description: Local server
+
+paths:
+
+  /manager/account:
+    post:
+      summary: Save Account
+      operationId: saveAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountDTO'
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Invalid input
+  /manager/accountMovements/{id}:
+    put:
+      summary: Update an existing account
+      description: Update an existing account by Id
+      operationId: accountMovements
+      parameters:
+        - name: id
+          in: path
+          description: ID of account to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent account in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountDTO'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Invalid input
+
+  /manager/account/{id}:
+    get:
+      summary: Get Account By Id
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          description:  Id of an Acoount to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDTO'
+  /manager/accountAll:
+    get:
+      summary: Get Account
+      operationId: getAccounts
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDTO'
+
+  /manager/consultAvailableBalances/{idClient}:
+    get:
+      summary: Get consultAvailableBalances By idClient
+      operationId: getConsultAvailableBalances
+      parameters:
+        - name: idClient
+          in: path
+          description:  idClient of an client to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDTO'
+
+  /manager/consultClientMovement/{idClient}/{idProduct}:
+    get:
+      summary: Get consultAvailableBalances By idClient
+      operationId: getConsultClientMovement
+      parameters:
+        - name: idClient
+          in: path
+          description:  idClient of an client to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: idProduct
+          in: path
+          description:  idProduct of an prodcut to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountMovementsDTO'
+
+
+components:
+  schemas:
+    Response:
+      type: object
+      additionalProperties:
+        type: object
+    AccountDTO:
+      type: object
+      description: Data element for account
+      properties:
+        id:
+          type: string
+        accountNumber:
+          type: string
+        initialAmount:
+          type: number
+          format: double
+        amountUpdated:
+          type: number
+          format: double
+        creditLimit:
+          type: number
+          format: double
+        creditAmountUpdated:
+          type: number
+          format: double
+        commission:
+          type: number
+          format: double
+        idClient:
+          type: string
+        idProduct:
+          type: string
+        productType:
+          type: string
+        movements:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMovementsDTO'
+
+    AccountMovementsDTO:
+      type: object
+      description: Data element for account Movements
+      properties:
+        quantity:
+          type: number
+          format: double
+        dateTransaction:
+          type: string
+          format: date
+        paymentDate:
+          type: string
+          format: date
+        paymentStatus:
+          type: string
+        typeMovement:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

@@ -1,5 +1,6 @@
 package com.nttdata.walletmicroservice.business;
 
+import com.nttdata.walletmicroservice.api.ConsumeExternalApi;
 import com.nttdata.walletmicroservice.entity.User;
 import com.nttdata.walletmicroservice.entity.Wallet;
 import com.nttdata.walletmicroservice.repository.UserRepository;
@@ -93,6 +94,8 @@ public class WalletServiceImpl implements WalletService{
         return userRepository.getUser(cellPhoneNumber, identificationDocumentNumber);
     }
 
+
+    /*
     @Override
     public Mono<Wallet> walletTransaction(String cellPhoneNumber, String identificationDocumentNumber, Mono<Wallet> wallet) {
         return wallet.flatMap(w -> {
@@ -116,6 +119,42 @@ public class WalletServiceImpl implements WalletService{
 
                     })
                     .flatMap(t -> walletRepository.save(w));
+
+
+        });
+    }*/
+
+    @Override
+    public Mono<Wallet> walletTransaction(String cellPhoneNumber, String identificationDocumentNumber, Mono<Wallet> wallet) {
+        return wallet.flatMap(walletRequest -> {
+            return getWallet(walletRequest.getCodeWallet())
+                    .map(walletBD -> {
+                        if(walletRequest.getLstWalletMovement().get(0).getTypeMovement().equals("DEPOSITO")){
+                            walletRequest.setAvailableBalance(walletBD.getAvailableBalance() + walletRequest.getLstWalletMovement().get(0).getAmount());
+                        }else{
+                            walletRequest.setAvailableBalance(walletBD.getAvailableBalance() - walletRequest.getLstWalletMovement().get(0).getAmount());
+                        }
+                        walletRequest.getLstWalletMovement().addAll(walletBD.getLstWalletMovement());
+
+                        return Mono.just(walletRequest);
+                    })
+                    .flatMap(userExist -> {
+                        return getUser(cellPhoneNumber, identificationDocumentNumber)
+                                .flatMap(user -> {
+                                    walletRequest.setIdUser(user.getId());
+                                    return Mono.just(walletRequest);
+                                });
+
+                    })
+                    .flatMap(clientExist -> {
+                        return ConsumeExternalApi.searchClientById(identificationDocumentNumber)
+                                .flatMap(client -> {
+                                    walletRequest.setIdClient(client.getIdClient());
+                                    return Mono.just(walletRequest);
+                                });
+
+                    })
+                    .flatMap(t -> walletRepository.save(walletRequest));
 
 
         });

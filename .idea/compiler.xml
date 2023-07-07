@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="banknotifications-microservice" />
         <module name="wallet-microservice" />
+        <module name="account-microservice" />
         <module name="client-microservice" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="account-microservice" options="-parameters" />
       <module name="banknotifications-microservice" options="-parameters" />
       <module name="client-microservice" options="-parameters" />
       <module name="wallet-microservice" options="-parameters" />
